@@ -1,5 +1,6 @@
 package tech.ryanfehr.androiddevclass3application;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,7 +23,7 @@ public class SecondActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        TextView transitionMessage = (TextView) findViewById(R.id.textViewSecond);
+        TextView transitionMessage = (TextView) findViewById(R.id.receivedValueText);
         transitionMessage.setText(intent.getStringExtra("USER_INPUT"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -35,7 +36,18 @@ public class SecondActivity extends AppCompatActivity {
         });
     }
 
+    public void OnClickDoubleButtonEventHandler(View view) {
+        double updatedValue = Double.parseDouble(((TextView) findViewById(R.id.receivedValueText)).getText().toString());
+        updatedValue *= 2;
+        Intent intent = new Intent();
+        intent.putExtra("UPDATED_VALUE", updatedValue);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
     public void OnClickBackButtonEventHandler(View view) {
+        Intent intent = new Intent();
+        setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }
 }

@@ -1,11 +1,13 @@
 package tech.ryanfehr.androiddevclass3application;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,10 +72,28 @@ public class FirstActivity extends AppCompatActivity {
         }
     }
     public void OnClickGoButtonEventHandler(View view) {
-        Button goButton = (Button) findViewById(R.id.goButton);
         Intent intent = new Intent(this, SecondActivity.class);
         TextView quotient = (TextView) findViewById(R.id.quotient);
         intent.putExtra("USER_INPUT", quotient.getText().toString());
-        startActivity(intent);
+        startActivityForResult(intent, 40);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_CANCELED) {
+            TextView returnValue = (TextView) findViewById(R.id.returnedValueText);
+            returnValue.setText("User canceled");
+            return;
+        }
+
+        switch(requestCode) {
+            case 40:
+                TextView returnValue = (TextView) findViewById(R.id.returnedValueText);
+                double dTest = data.getDoubleExtra("UPDATED_VALUE", 0);
+                returnValue.setText("You doubled to value: " + dTest);
+                break;
+        }
     }
 }
