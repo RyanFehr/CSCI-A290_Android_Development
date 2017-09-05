@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calculatorConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tech.ryanfehr.androiddevweek3assignment.CalculatorActivity">
+
+    <TableLayout
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:baselineAligned="false"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/welcomeTextView"
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:text="Welcome" />
+
+        </TableRow>
+
+        <TableRow android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/operandEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/additionButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/subtractionButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/divisionButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="/" />
+
+            <Button
+                android:id="@+id/multiplicationButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="*" />
+
+            <Button
+                android:id="@+id/squareButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="^2"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/squareRootButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="^.5"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/equalButton"
+                android:layout_height="wrap_content"
+                android:text="=" />
+        </TableRow>
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>
