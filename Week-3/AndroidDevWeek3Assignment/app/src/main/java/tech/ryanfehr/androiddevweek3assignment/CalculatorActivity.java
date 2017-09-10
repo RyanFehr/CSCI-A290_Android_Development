@@ -43,7 +43,7 @@ public class CalculatorActivity extends AppCompatActivity {
                 findViewById(R.id.calculatorConstraintLayout).getRootView().setBackgroundColor(Color.RED);
                 break;
             case "Green":
-                findViewById(R.id.calculatorConstraintLayout).getRootView().setBackgroundColor(Color.GREEN);
+                findViewById(R.id.calculatorConstraintLayout).getRootView().setBackgroundResource(android.R.color.holo_green_light);
                 break;
             case "Blue":
                 findViewById(R.id.calculatorConstraintLayout).getRootView().setBackgroundColor(Color.BLUE);
@@ -206,7 +206,6 @@ public class CalculatorActivity extends AppCompatActivity {
             return;
         }
         String[] equationSplit = equation.split("\\s");
-        System.out.println(equationSplit[2]);
         if (equationSplit.length > 2 && operandValid(equationSplit[0]) && operandValid(equationSplit[2])) {
             double operandOne = operandParse(equationSplit[0]);
             String operation = equationSplit[1];

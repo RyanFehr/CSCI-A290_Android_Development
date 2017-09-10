@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                 findViewById(R.id.loginConstraintLayout).getRootView().setBackgroundColor(Color.RED);
                 break;
             case "Green":
-                findViewById(R.id.loginConstraintLayout).getRootView().setBackgroundColor(Color.GREEN);
+                findViewById(R.id.loginConstraintLayout).getRootView().setBackgroundResource(android.R.color.holo_green_light);
                 break;
             case "Blue":
                 findViewById(R.id.loginConstraintLayout).getRootView().setBackgroundColor(Color.BLUE);
