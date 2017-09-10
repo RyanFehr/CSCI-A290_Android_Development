@@ -15,7 +15,7 @@ import java.util.Set;
 public class CalculatorActivity extends AppCompatActivity {
 
     private static boolean acceptingOperation = false;
-    private static final Character[] OPERATION_SET = new Character[] { '+', '-', '/', '*' };
+    private static final Character[] OPERATION_SET = new Character[]{'+', '-', '/', '*'};
     private static HashSet<Character> OPERATIONS = new HashSet(Arrays.asList(OPERATION_SET));
 
     @Override
@@ -63,7 +63,6 @@ public class CalculatorActivity extends AppCompatActivity {
         String equation = equationTextView.getText().toString();
 
 
-
         for (int i = equation.length() - 1; i >= 0; i--) {
             if (OPERATIONS.contains(equation.charAt(i))) {
                 acceptingOperation = false;
@@ -77,6 +76,13 @@ public class CalculatorActivity extends AppCompatActivity {
     // Adds a operand to the equation
     public void addOperand(String operand) {
         TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
+        String equation = equationTextView.getText().toString();
+        if (equation.length() > 0) {
+            if (equation.charAt(equation.length() - 1) == '²') {
+                Toast.makeText(CalculatorActivity.this, "x² must be followed by an operation", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
         equationTextView.setText(equationTextView.getText().toString() + operand);
     }
 
@@ -96,8 +102,8 @@ public class CalculatorActivity extends AppCompatActivity {
     public void backButtonOnClickEventListener(View view) {
         TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
         String equation = equationTextView.getText().toString();
-        if(equation.length() > 0) {
-            char lastChar = equation.charAt(equation.length()-1);
+        if (equation.length() > 0) {
+            char lastChar = equation.charAt(equation.length() - 1);
             if (lastChar == ' ') equation = equation.substring(0, equation.length() - 3);
             else equation = equation.substring(0, equation.length() - 1);
         }
@@ -128,11 +134,28 @@ public class CalculatorActivity extends AppCompatActivity {
     }
 
     public void squareButtonOnClickEventListener(View view) {
-        addOperation("²");
+        TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
+        String equation = equationTextView.getText().toString();
+        if (equation.length() > 0) {
+            if (Character.isDigit(equation.charAt(equation.length() - 1))) {
+                equationTextView.setText(equationTextView.getText().toString() + "²");
+            } else {
+                Toast.makeText(CalculatorActivity.this, "² must come after operands", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
     }
 
     public void squareRootButtonOnClickEventListener(View view) {
-        addOperation("√");
+        TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
+        String equation = equationTextView.getText().toString();
+        if (equation.length() > 0) {
+            if (Character.isDigit(equation.charAt(equation.length() - 1))) {
+                Toast.makeText(CalculatorActivity.this, "√ must come before operands", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        equationTextView.setText(equationTextView.getText().toString() + "√");
     }
 
     public void button0OnClickEventListener(View view) {
@@ -178,17 +201,18 @@ public class CalculatorActivity extends AppCompatActivity {
     public void equalButtonOnClickEventListener(View view) {
         TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
         String equation = equationTextView.getText().toString();
-        if(equation.indexOf('=') >-1) {
+        if (equation.indexOf('=') > -1) {
             Toast.makeText(CalculatorActivity.this, "Remove = before re-evaluating", Toast.LENGTH_SHORT).show();
             return;
         }
         String[] equationSplit = equation.split("\\s");
-        if(equationSplit.length > 2) {
-            int operandOne = Integer.valueOf(equationSplit[0]);
-            String operand = equationSplit[1];
-            int operandTwo = Integer.valueOf(equationSplit[2]);
+        System.out.println(equationSplit[2]);
+        if (equationSplit.length > 2 && operandValid(equationSplit[0]) && operandValid(equationSplit[2])) {
+            double operandOne = operandParse(equationSplit[0]);
+            String operation = equationSplit[1];
+            double operandTwo = operandParse(equationSplit[2]);
             double result = 0;
-            switch (operand) {
+            switch (operation) {
                 case "+":
                     result = operandOne + operandTwo;
                     break;
@@ -196,7 +220,7 @@ public class CalculatorActivity extends AppCompatActivity {
                     result = operandOne - operandTwo;
                     break;
                 case "/": {
-                    if(operandTwo == 0) {
+                    if (operandTwo == 0) {
                         Toast.makeText(CalculatorActivity.this, "You can't divide by 0", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -206,15 +230,37 @@ public class CalculatorActivity extends AppCompatActivity {
                 case "*":
                     result = operandOne * operandTwo;
                     break;
-                case "²":
-                    result = operandOne * operandOne;
-                    break;
-                case "√":
-                    result = Math.sqrt(operandTwo);
-                    break;
             }
             equation = equation + " = " + result;
             equationTextView.setText(equation);
+        } else {
+            Toast.makeText(CalculatorActivity.this, "Invalid equation formatting", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    public double operandParse(String operand) {
+        if (operand.charAt(operand.length() - 1) == '²') {
+            if (operand.charAt(0) == '√') {
+                return Double.valueOf(operand.substring(1, operand.length() - 1));
+            } else {
+                double num = Double.valueOf(operand.substring(0, operand.length() - 1));
+                return num * num;
+            }
+        }
+        if (operand.charAt(0) == '√') {
+            return Math.sqrt(Double.valueOf(operand.substring(1, operand.length())));
+        }
+        return Double.valueOf(operand);
+    }
+
+    public boolean operandValid(String operand) {
+        if (operand.length() > 1) {
+            return operand.substring(1, operand.length()).indexOf('√') == -1
+                    && operand.substring(0, operand.length() - 1).indexOf('²') == -1;
+        }
+        else {
+            return !operand.equals("√");
         }
 
     }
