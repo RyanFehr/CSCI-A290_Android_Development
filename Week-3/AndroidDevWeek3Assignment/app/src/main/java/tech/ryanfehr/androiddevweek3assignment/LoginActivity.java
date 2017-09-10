@@ -12,10 +12,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String[] COLORS = new String[] { "Red", "Green", "Blue", "White", "Black" };
+    private static final String[] COLORS = new String[]{"Red", "Green", "Blue", "White", "Black"};
     private static final int MAX_LOGINS = 3;
     private static int loginAttempts = 0;
 
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private void backgroundColorAutoCompleteTextViewOnDismissListener() {
         AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.backgroundColorAutoCompleteTextView);
 
-        switch(autoCompleteTextView.getText().toString()) {
+        switch (autoCompleteTextView.getText().toString()) {
             case "Red":
                 findViewById(R.id.loginConstraintLayout).getRootView().setBackgroundColor(Color.RED);
                 break;
@@ -69,9 +70,13 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailEditText = (EditText) findViewById(R.id.emailEditText);
         EditText backgroundColorEditText = (EditText) findViewById(R.id.backgroundColorAutoCompleteTextView);
 
-        if(verifyUser()) {
-            SharedPreferences appFreferences = getSharedPreferences("Calculator", MODE_PRIVATE);
-            SharedPreferences.Editor appEditor = appFreferences.edit();
+        if (verifyUser()) {
+            if(backgroundColorEditText.getText().toString().equals("")) {
+                Toast.makeText(this, "Please select a favorite color", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            SharedPreferences appPreferences = getSharedPreferences("Calculator", MODE_PRIVATE);
+            SharedPreferences.Editor appEditor = appPreferences.edit();
             appEditor.putString("FIRST_NAME", firstNameEditText.getText().toString());
             appEditor.putString("LAST_NAME", lastNameEditText.getText().toString());
             appEditor.putString("EMAIL", emailEditText.getText().toString());
@@ -79,8 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             appEditor.commit();
             Intent intent = new Intent(this, CalculatorActivity.class);
             startActivityForResult(intent, 40);
-        }
-        else {
+        } else {
             loginAttempts++;
             TextView loginAttemptsTextView = (TextView) findViewById(R.id.loginAttemptsTextView);
             loginAttemptsTextView.setText("Login Attempts: " + loginAttempts);
@@ -103,25 +107,35 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        // Verifies that all fields are correct
-        if(!firstName.equals("") && !lastName.equals("") && password.equals("password")) {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        // Verifies that all fields are non-empty, email is valid, and password is password
+        if (!firstName.equals("") && !lastName.equals("") && password.equals("password")) {
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                return true;
+            else
+                Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
         }
 
         return false;
     }
 
+    // Handles when a activity is resolved
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == Activity.RESULT_CANCELED) {
+        if (resultCode == Activity.RESULT_CANCELED) {
             return;
         }
 
-        switch(requestCode) {
+        switch (requestCode) {
             case 40:
                 break;
         }
+    }
+
+    // Navigates to activity 2 without the need for credentials for ease of testing
+    public void quickButtonOnClickEventListener(View view) {
+        Intent intent = new Intent(this, CalculatorActivity.class);
+        startActivityForResult(intent, 40);
     }
 }

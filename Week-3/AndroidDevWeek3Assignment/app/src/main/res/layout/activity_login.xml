@@ -102,6 +102,13 @@
                 android:layout_height="wrap_content"
                 android:text="Login Attempts: 0" />
 
+            <Button
+                android:id="@+id/quickButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="quickButtonOnClickEventListener"
+                android:text="Quick" />
+
         </TableRow>
     </TableLayout>
 
