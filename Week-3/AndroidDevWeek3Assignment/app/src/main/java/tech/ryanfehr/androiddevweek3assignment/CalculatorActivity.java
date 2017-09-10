@@ -140,6 +140,7 @@ public class CalculatorActivity extends AppCompatActivity {
         addOperation(" * ");
     }
 
+    // Adds a power of 2 symbol if it is valid
     public void squareButtonOnClickEventListener(View view) {
         TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
         String equation = equationTextView.getText().toString();
@@ -153,6 +154,7 @@ public class CalculatorActivity extends AppCompatActivity {
         }
     }
 
+    // Adds a square root symbol if it is valid
     public void squareRootButtonOnClickEventListener(View view) {
         TextView equationTextView = (TextView) findViewById(R.id.equationTextView);
         String equation = equationTextView.getText().toString();
@@ -289,7 +291,7 @@ public class CalculatorActivity extends AppCompatActivity {
 
         int weekdays = 0;
         int weekends = 0;
-        if(!pastCalendar.before(todayCalendar)) {
+        if (!pastCalendar.before(todayCalendar)) {
             Toast.makeText(CalculatorActivity.this, "Please choose a date in the past", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -297,8 +299,7 @@ public class CalculatorActivity extends AppCompatActivity {
             if ((Calendar.SATURDAY == pastCalendar.get(Calendar.DAY_OF_WEEK))
                     || (Calendar.SUNDAY == pastCalendar.get(Calendar.DAY_OF_WEEK))) {
                 weekends++;
-            }
-            else {
+            } else {
                 weekdays++;
             }
             pastCalendar.add(Calendar.DATE, 1);

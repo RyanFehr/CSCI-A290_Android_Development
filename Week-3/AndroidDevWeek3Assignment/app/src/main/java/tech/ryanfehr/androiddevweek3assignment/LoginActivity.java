@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,14 @@ public class LoginActivity extends AppCompatActivity {
         EditText lastNameEditText = (EditText) findViewById(R.id.lastNameEditText);
         EditText emailEditText = (EditText) findViewById(R.id.emailEditText);
         EditText backgroundColorEditText = (EditText) findViewById(R.id.backgroundColorAutoCompleteTextView);
+        CheckBox rememberCheckBox = (CheckBox) findViewById(R.id.rememberCheckBox);
+
+        // Navigates to activity 2 without the need for credentials for ease of testing
+        if(rememberCheckBox.isChecked()) {
+            Intent intent = new Intent(this, CalculatorActivity.class);
+            startActivityForResult(intent, 40);
+            return;
+        }
 
         if (verifyUser()) {
             if(backgroundColorEditText.getText().toString().equals("")) {
@@ -86,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivityForResult(intent, 40);
         } else {
             loginAttempts++;
+            Toast.makeText(this, "Login attempt failed", Toast.LENGTH_SHORT).show();
             TextView loginAttemptsTextView = (TextView) findViewById(R.id.loginAttemptsTextView);
             loginAttemptsTextView.setText("Login Attempts: " + loginAttempts);
             if (loginAttempts >= MAX_LOGINS) { // Disables button if 3 or more failed login attempts
@@ -131,11 +141,5 @@ public class LoginActivity extends AppCompatActivity {
             case 40:
                 break;
         }
-    }
-
-    // Navigates to activity 2 without the need for credentials for ease of testing
-    public void quickButtonOnClickEventListener(View view) {
-        Intent intent = new Intent(this, CalculatorActivity.class);
-        startActivityForResult(intent, 40);
     }
 }
