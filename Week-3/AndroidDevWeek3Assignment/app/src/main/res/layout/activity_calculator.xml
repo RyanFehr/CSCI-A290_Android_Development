@@ -243,6 +243,57 @@
                 android:layout_weight="1" />
 
         </TableRow>
+
+        <TableRow
+            android:id="@+id/row8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose a past date (mm/dd/yyyy):" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/dateEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/dateButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="dateButtonOnClickEventListener"
+                android:text="Calculate Days" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/dayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Days:" />
+        </TableRow>
     </TableLayout>
 
 </android.support.constraint.ConstraintLayout>

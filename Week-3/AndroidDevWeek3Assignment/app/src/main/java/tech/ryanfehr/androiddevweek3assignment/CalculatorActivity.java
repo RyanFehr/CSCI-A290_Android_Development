@@ -5,10 +5,17 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -257,10 +264,46 @@ public class CalculatorActivity extends AppCompatActivity {
         if (operand.length() > 1) {
             return operand.substring(1, operand.length()).indexOf('√') == -1
                     && operand.substring(0, operand.length() - 1).indexOf('²') == -1;
-        }
-        else {
+        } else {
             return !operand.equals("√");
         }
 
+    }
+
+    public void dateButtonOnClickEventListener(View view) {
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        EditText dateEditText = (EditText) findViewById(R.id.dateEditText);
+        String dateString = dateEditText.getText().toString();
+        Date pastDate = null;
+        try {
+            pastDate = df.parse(dateString);
+        } catch (ParseException e) {
+            Toast.makeText(CalculatorActivity.this, "Invalid date formatting", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Date today = new Date();
+        Calendar pastCalendar = Calendar.getInstance();
+        Calendar todayCalendar = Calendar.getInstance();
+        pastCalendar.setTime(pastDate);
+        todayCalendar.setTime(today);
+
+        int weekdays = 0;
+        int weekends = 0;
+        if(!pastCalendar.before(todayCalendar)) {
+            Toast.makeText(CalculatorActivity.this, "Please choose a date in the past", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        while (pastCalendar.before(todayCalendar)) {
+            if ((Calendar.SATURDAY == pastCalendar.get(Calendar.DAY_OF_WEEK))
+                    || (Calendar.SUNDAY == pastCalendar.get(Calendar.DAY_OF_WEEK))) {
+                weekends++;
+            }
+            else {
+                weekdays++;
+            }
+            pastCalendar.add(Calendar.DATE, 1);
+        }
+        TextView dateTextView = (TextView) findViewById(R.id.dayTextView);
+        dateTextView.setText("Days between - Working days: " + weekdays + " Weekend days: " + weekends);
     }
 }
