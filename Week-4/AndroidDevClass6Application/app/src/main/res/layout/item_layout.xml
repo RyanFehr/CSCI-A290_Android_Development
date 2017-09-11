@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/item_profileIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        android:src="@drawable/identicon_green" />
+
+    <TextView
+        android:id="@+id/item_fullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Full Name"
+        android:textColor="@color/colorAccent"
+        android:textSize="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/item_profileIcon"
+        android:layout_marginStart="12dp" />
+
+    <TextView
+        android:id="@+id/item_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone Number"
+        android:layout_below="@+id/item_fullName"
+        android:layout_alignStart="@+id/item_fullName" />
+
+    <TextView
+        android:id="@+id/item_emailAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email Address"
+        android:layout_below="@+id/item_phoneNumber"
+        android:layout_alignStart="@+id/item_phoneNumber" />
+</RelativeLayout>
