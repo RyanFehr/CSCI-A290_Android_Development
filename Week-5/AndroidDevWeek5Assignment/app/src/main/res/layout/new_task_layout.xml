@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.00">
+
+        <EditText
+            android:id="@+id/newTitleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="0.00"
+            android:ems="10"
+            android:hint="New Task Title"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/newContentEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/newTitleEditText"
+            android:layout_weight="0.04"
+            android:ems="10"
+            android:hint="New Task details"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/saveNewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Save"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="19dp" />
+
+        <Button
+            android:id="@+id/cancelNewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/saveNewButton"
+            android:layout_alignBottom="@+id/saveNewButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="28dp"
+            android:text="Cancel" />
+
+    </RelativeLayout>
+
+</LinearLayout>
