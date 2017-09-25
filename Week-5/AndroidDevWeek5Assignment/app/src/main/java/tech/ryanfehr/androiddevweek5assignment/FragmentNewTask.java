@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -34,6 +38,7 @@ public class FragmentNewTask extends Fragment{
         View view = inflater.inflate(R.layout.new_task_layout, container, false);
         final EditText newTitleEditText = (EditText) view.findViewById(R.id.newTitleEditText);
         final EditText newContentEditText = (EditText) view.findViewById(R.id.newContentEditText);
+        final EditText newDateEditText = (EditText) view.findViewById(R.id.newDateEditText);
 
         Button saveNewButton = (Button) view.findViewById(R.id.saveNewButton);
         saveNewButton.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +52,33 @@ public class FragmentNewTask extends Fragment{
                     Toast.makeText(getActivity(), "You must have content for new Tasks", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                taskNewCallback.taskAdded(newTitleEditText.getText().toString(), newContentEditText.getText().toString(), new Date());
+                if(newDateEditText.getText().toString().trim().equals("")) {
+                    Toast.makeText(getActivity(), "You must have a date for this Task", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+                String dateString = newDateEditText.getText().toString();
+                Date futureDate = null;
+                try {
+                    futureDate = df.parse(dateString);
+                } catch (ParseException e) {
+                    Toast.makeText(getActivity(), "Invalid date formatting", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Date today = new Date();
+                Calendar futureCalendar = Calendar.getInstance();
+                Calendar todayCalendar = Calendar.getInstance();
+                futureCalendar.setTime(futureDate);
+                todayCalendar.setTime(today);
+
+                if (!todayCalendar.before(futureCalendar)) {
+                    Toast.makeText(getActivity(), "Please choose a date in the future", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                taskNewCallback.taskAdded(newTitleEditText.getText().toString(), newContentEditText.getText().toString(), futureDate);
                 getFragmentManager().popBackStack();
             }
         });

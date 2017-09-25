@@ -16,12 +16,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -139,6 +141,16 @@ public class MainActivity extends AppCompatActivity implements FragmentEditTask.
             taskTitleTextView.setText(currentTask.getTitle());
             TextView taskContentTextView = (TextView) viewItem.findViewById(R.id.taskContentTextView);
             taskContentTextView.setText(currentTask.getContent());
+
+            Date today = new Date();
+            Calendar todayCalendar = Calendar.getInstance();
+            Calendar taskCalendar = Calendar.getInstance();
+            taskCalendar.setTime(currentTask.getFinishByDate());
+            todayCalendar.setTime(today);
+
+            if (taskCalendar.before(todayCalendar)) {
+                Toast.makeText(MainActivity.this, "You have ran out of time to complete " + currentTask.getTitle(), Toast.LENGTH_SHORT).show();
+            }
 
             return viewItem;
         }

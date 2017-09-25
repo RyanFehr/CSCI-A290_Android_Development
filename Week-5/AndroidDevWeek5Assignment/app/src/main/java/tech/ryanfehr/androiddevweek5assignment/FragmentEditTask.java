@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -40,6 +44,10 @@ public class FragmentEditTask extends Fragment {
         titleEditText.setText(task.getTitle());
         final EditText contentEditText = (EditText) view.findViewById(R.id.contentEditText);
         contentEditText.setText(task.getContent());
+        final EditText dateEditText = (EditText) view.findViewById(R.id.dateEditText);
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        dateEditText.setText(df.format(task.getFinishByDate()));
+
         originalTitle = task.getTitle();
         originalContent = task.getContent();
         originalDate = task.getFinishByDate();
@@ -49,14 +57,40 @@ public class FragmentEditTask extends Fragment {
             @Override
             public void onClick(View v) {
                 if(titleEditText.getText().toString().trim().equals("")) {
-                    Toast.makeText(getActivity(), "You must have a title for this Tasks", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You must have a title for this Task", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(contentEditText.getText().toString().trim().equals("")) {
-                    Toast.makeText(getActivity(), "You must have content for this Tasks", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You must have content for this Task", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                taskCallback.taskUpdated(titleEditText.getText().toString(), contentEditText.getText().toString(), originalDate);
+                if(dateEditText.getText().toString().trim().equals("")) {
+                    Toast.makeText(getActivity(), "You must have a date for this Task", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+                String dateString = dateEditText.getText().toString();
+                Date futureDate = null;
+                try {
+                    futureDate = df.parse(dateString);
+                } catch (ParseException e) {
+                    Toast.makeText(getActivity(), "Invalid date formatting", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Date today = new Date();
+                Calendar futureCalendar = Calendar.getInstance();
+                Calendar todayCalendar = Calendar.getInstance();
+                futureCalendar.setTime(futureDate);
+                todayCalendar.setTime(today);
+
+                if (!todayCalendar.before(futureCalendar)) {
+                    Toast.makeText(getActivity(), "Please choose a date in the future", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                taskCallback.taskUpdated(titleEditText.getText().toString(), contentEditText.getText().toString(), futureDate);
                 getFragmentManager().popBackStack();
             }
         });
