@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.Date;
 
 /**
  * Created by Ryan on 9/25/2017.
@@ -19,7 +22,7 @@ public class FragmentNewTask extends Fragment{
     OnTaskNewListener taskNewCallback;
 
     public interface OnTaskNewListener {
-        public void taskAdded( String taskTitle, String taskContent);
+        public void taskAdded( String taskTitle, String taskContent, Date taskDate);
     }
 
     @Nullable
@@ -36,7 +39,23 @@ public class FragmentNewTask extends Fragment{
         saveNewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskNewCallback.taskAdded(newTitleEditText.getText().toString(), newContentEditText.getText().toString());
+                if(newTitleEditText.getText().toString().trim().equals("")) {
+                    Toast.makeText(getActivity(), "You must have a title for new Tasks", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(newContentEditText.getText().toString().trim().equals("")) {
+                    Toast.makeText(getActivity(), "You must have content for new Tasks", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                taskNewCallback.taskAdded(newTitleEditText.getText().toString(), newContentEditText.getText().toString(), new Date());
+                getFragmentManager().popBackStack();
+            }
+        });
+
+        Button cancelNewButton = (Button) view.findViewById(R.id.cancelNewButton);
+        cancelNewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 getFragmentManager().popBackStack();
             }
         });

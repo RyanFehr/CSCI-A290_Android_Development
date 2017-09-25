@@ -45,11 +45,20 @@
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="Cancel"
+            android:layout_alignBaseline="@+id/deleteButton"
+            android:layout_alignBottom="@+id/deleteButton"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
             android:layout_alignBaseline="@+id/saveButton"
             android:layout_alignBottom="@+id/saveButton"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="28dp"
-            android:text="Cancel" />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

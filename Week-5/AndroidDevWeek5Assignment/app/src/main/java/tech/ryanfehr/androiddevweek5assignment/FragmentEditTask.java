@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.Date;
 
 /**
  * Created by Ryan on 9/23/2017.
@@ -17,9 +20,12 @@ import android.widget.EditText;
 public class FragmentEditTask extends Fragment {
 
     OnTaskUpdateListener taskCallback;
+    String originalTitle;
+    String originalContent;
+    Date originalDate;
 
     public interface OnTaskUpdateListener {
-        public void taskUpdated( String taskTitle, String taskContent);
+        public void taskUpdated( String taskTitle, String taskContent, Date taskDate);
     }
 
     @Nullable
@@ -34,12 +40,41 @@ public class FragmentEditTask extends Fragment {
         titleEditText.setText(task.getTitle());
         final EditText contentEditText = (EditText) view.findViewById(R.id.contentEditText);
         contentEditText.setText(task.getContent());
+        originalTitle = task.getTitle();
+        originalContent = task.getContent();
+        originalDate = task.getFinishByDate();
 
         Button saveButton = (Button) view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskCallback.taskUpdated(titleEditText.getText().toString(), contentEditText.getText().toString());
+                if(titleEditText.getText().toString().trim().equals("")) {
+                    Toast.makeText(getActivity(), "You must have a title for this Tasks", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(contentEditText.getText().toString().trim().equals("")) {
+                    Toast.makeText(getActivity(), "You must have content for this Tasks", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                taskCallback.taskUpdated(titleEditText.getText().toString(), contentEditText.getText().toString(), originalDate);
+                getFragmentManager().popBackStack();
+            }
+        });
+
+        Button cancelButton = (Button) view.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskCallback.taskUpdated(originalTitle, originalContent, originalDate);
+                getFragmentManager().popBackStack();
+            }
+        });
+
+        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskCallback.taskUpdated("delete", "delete", null); // null date deletes
                 getFragmentManager().popBackStack();
             }
         });

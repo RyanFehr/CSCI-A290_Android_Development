@@ -17,8 +17,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -35,18 +38,28 @@ public class MainActivity extends AppCompatActivity implements FragmentEditTask.
         populateTaskListView();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences savedTasks = getSharedPreferences("SAVED_TASKS", MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = savedTasks.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(taskList); // myObject - instance of MyObject
+        prefsEditor.putString("SAVED_TASKS", json);
+        prefsEditor.commit();
+    }
+
+
     private void populateTaskList() {
         SharedPreferences savedTasks = getSharedPreferences("SAVED_TASKS", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = savedTasks.getString("SAVED_TASKS", "");
-        taskList  = (List<Task>) gson.fromJson(json, ArrayList.class);
-
-//        SharedPreferences savedTasks = getSharedPreferences("SAVED_TASKS", MODE_PRIVATE);
-//        Editor prefsEditor = savedTasks.edit();
-//        Gson gson = new Gson();
-//        String json = gson.toJson(taskList); // myObject - instance of MyObject
-//        prefsEditor.putString("SAVED_TASKS", json);
-//        prefsEditor.commit();
+        Task[] tArray  = gson.fromJson(json, Task[].class);
+        taskList = new ArrayList<>(Arrays.asList(tArray));
+        if(taskList.size() == 0) {
+            taskList = new ArrayList<>();
+            taskList.add(new Task("Example Task", "* Create a new task by clicking the +\n* Edit this task by clicking it", new Date()));
+        }
     }
 
     private void populateTaskListView() {
@@ -87,17 +100,19 @@ public class MainActivity extends AppCompatActivity implements FragmentEditTask.
     }
 
     @Override
-    public void taskUpdated(String taskTitle, String taskContent) {
-        Task task = new Task(taskTitle, taskContent, new Date());
-        taskList.add(task);
+    public void taskUpdated(String taskTitle, String taskContent, Date taskDate) {
+        if(taskDate != null) {  // We updated a task
+            Task task = new Task(taskTitle, taskContent, taskDate);
+            taskList.add(task);
+        }
         populateTaskListView();
         findViewById(R.id.taskListView).setVisibility(View.VISIBLE);
         findViewById(R.id.addButton).setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void taskAdded(String taskTitle, String taskContent) {
-        Task task = new Task(taskTitle, taskContent, new Date());
+    public void taskAdded(String taskTitle, String taskContent, Date taskDate) {
+        Task task = new Task(taskTitle, taskContent, taskDate);
         taskList.add(task);
         populateTaskListView();
         findViewById(R.id.taskListView).setVisibility(View.VISIBLE);
