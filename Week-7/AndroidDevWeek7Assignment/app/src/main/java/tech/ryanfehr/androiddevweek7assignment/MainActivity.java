@@ -1,13 +1,22 @@
 package tech.ryanfehr.androiddevweek7assignment;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
+import android.hardware.SensorManager;
+import android.support.annotation.IntDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Matrix temp = new Matrix();
     ImageView imageViewBall;
     TextView textView;
+    OrientationEventListener myOrientationEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,25 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        myOrientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL){
+            @Override
+            public void onOrientationChanged(int arg0) {
+                Log.e("ORNAMENT", arg0+"");
+                getRotation(MainActivity.this, arg0);
+            }};
+
+        if (myOrientationEventListener.canDetectOrientation()){
+            myOrientationEventListener.enable();
+        }
+        else{
+            finish();
+        }
+
+
+
+
+//        Log.d("ORIENTATION", getRotation(MainActivity.this));
     }
 
     private void handleUserTouch(MotionEvent event) {
@@ -63,5 +92,27 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bmp = Bitmap.createBitmap(imageViewBall.getWidth(), imageViewBall.getHeight(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bmp);
         imageViewBall.draw(canvas);
+    }
+
+
+
+    public String getRotation(Context context, int angle){
+        final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+        Log.e("rotation " , angle+"");
+        RelativeLayout main = (RelativeLayout) findViewById(R.id.mainLayout);
+        switch (angle) {
+            case 0:
+                main.setBackground(getDrawable(R.drawable.arrow));
+                return "portrait 0";
+            case 90:
+                main.setBackground(getDrawable(R.drawable.arrow_right));
+                return "landscape 90";
+            case 180:
+                main.setBackground(getDrawable(R.drawable.arrow_right));
+                return "reverse portrait 180";
+            default:
+                main.setBackground(getDrawable(R.drawable.arrow_left));
+                return "reverse landscape 270";
+        }
     }
 }
